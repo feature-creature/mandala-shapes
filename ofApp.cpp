@@ -3,12 +3,20 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetBackgroundColor(255);
+    rotAngle = 0;
+    angleStep = 0.1;
 
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    // create bounds for the angle rotation
+    if(rotAngle <= -15 || rotAngle >= 15)
+    {
+        angleStep = -1 * angleStep;
+    }
+    // update the angle each frame
+    rotAngle += angleStep;
 }
 
 //--------------------------------------------------------------
@@ -44,7 +52,7 @@ void ofApp::draw(){
     // Otherwise, return the value unchanged.
 
     // linearly map the mouse x-position in the window to custom range with active clamping
-    int resolution = ofMap(mouseX,0,ofGetWidth(),3,20, true);
+    int resolution = ofMap(mouseX,0,ofGetWidth(),2,20, true);
     float noOfStars = 20;
 
     // !! didnt realize i is clearly meant to indicate index
@@ -53,8 +61,8 @@ void ofApp::draw(){
         ofTranslate(ofGetWidth()/2,ofGetHeight()/2);
         for(float i = 0; i <= noOfStars; i++)
         {
-                // rotate 5 * index
-                ofRotate(5*i);
+                // rotate individual
+                ofRotate(i*5+ rotAngle);
                 // scale along the x+y-axis according to star index
                 ofScale(1-1/noOfStars,1-1/noOfStars, 1);
                 // color: linearly map the the index to 8-bit value with active clamping

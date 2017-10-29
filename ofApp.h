@@ -22,4 +22,7 @@ public:
     void gotMessage(ofMessage msg);
     void star(float x, float y, float radius1, float radius2, int npoints);
 
+    float rotAngle;
+    float angleStep;
+
 };
