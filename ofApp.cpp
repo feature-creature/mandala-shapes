@@ -2,9 +2,11 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    // initialize
     ofSetBackgroundColor(255);
+    ofSetBackgroundAuto(false);
     rotAngle = 0;
-    angleStep = 0.1;
+    angleStep = 0.05;
 
 }
 
@@ -21,6 +23,9 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    // create trailing by drawing transparent rect over background
+    ofSetColor(255,50);
+    ofDrawRectangle(0,0,ofGetScreenWidth(),ofGetScreenHeight());
     // declare local variables
 
     // ofMap:
@@ -78,7 +83,10 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    // save frame as date-frame_number.png
+    if(key == 's'){
+        ofSaveScreen(ofGetTimestampString() + "-" + ofToString(ofGetFrameNum()) + ".png");
+    }
 }
 
 //--------------------------------------------------------------
