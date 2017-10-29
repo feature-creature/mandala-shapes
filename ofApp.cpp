@@ -42,11 +42,15 @@ void ofApp::draw(){
 
     // linearly map the mouse x-position in the window to custom range with active clamping
     int resolution = ofMap(mouseX,0,ofGetWidth(),3,20, true);
+    // linearly map the mouse y-position in the window to custom range with active clamping
+    int radius2 = ofMap(mouseY,0,ofGetHeight(),50,400,true);
+    int radius1 = 200;
 
-
+    // set color to black
     ofSetColor(0);
+    // translate buffer(?) to center of window
     ofTranslate(ofGetWidth()/2,ofGetHeight()/2);
-    star(0, 0, 100, 150, resolution);
+    star(0, 0, radius1, radius2, resolution);
 
 }
 
