@@ -3,6 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetBackgroundColor(255);
+
 }
 
 //--------------------------------------------------------------
@@ -16,6 +17,8 @@ void ofApp::draw(){
 
     // ofMap:
     // Linerally map a value between two ranges.
+    // ofMap(float value, float inputMin, float inputMax, float outputMin, float outputMax, bool clamp=false)
+    // return float
     // If an input value is 50% of the way between inputMin and inputMax range,
     // the output value will be 50% of the way between outpuMin and outputMax.
     // ?? non linear mapping options
@@ -42,15 +45,26 @@ void ofApp::draw(){
 
     // linearly map the mouse x-position in the window to custom range with active clamping
     int resolution = ofMap(mouseX,0,ofGetWidth(),3,20, true);
-    // linearly map the mouse y-position in the window to custom range with active clamping
-    int radius2 = ofMap(mouseY,0,ofGetHeight(),50,400,true);
-    int radius1 = 200;
+    float noOfStars = 20;
 
-    // set color to black
-    ofSetColor(0);
-    // translate buffer(?) to center of window
-    ofTranslate(ofGetWidth()/2,ofGetHeight()/2);
-    star(0, 0, radius1, radius2, resolution);
+    // !! didnt realize i is clearly meant to indicate index
+    ofPushMatrix();
+        // translate buffer(?) to center of window
+        ofTranslate(ofGetWidth()/2,ofGetHeight()/2);
+        for(float i = 0; i <= noOfStars; i++)
+        {
+                // rotate 5 * index
+                ofRotate(5*i);
+                // scale along the x+y-axis according to star index
+                ofScale(1-1/noOfStars,1-1/noOfStars, 1);
+                // color: linearly map the the index to 8-bit value with active clamping
+                ofSetColor(ofMap(i,0,noOfStars,0,255, true));
+                // linearly map the mouse y-position in the window to custom range with active clamping
+                int radius2 = ofMap(mouseY,0,ofGetHeight(),50,400,true);
+                int radius1 = 200;
+                star(0, 0, radius1, radius2, resolution);
+    }
+    ofPopMatrix();
 
 }
 
