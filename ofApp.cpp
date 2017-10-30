@@ -5,27 +5,28 @@ void ofApp::setup(){
     // initialize
     ofSetBackgroundColor(255);
     ofSetBackgroundAuto(false);
-    rotAngle = 0;
-    angleStep = 0.05;
-
+    noOfStars = 15;
+    for(int i = 0; i <= noOfStars; i++){
+        radius1.push_back(ofRandom(50,ofGetScreenWidth()/4));
+        radius2.push_back(ofRandom(25,ofGetScreenWidth()/3.5));
+        resolution.push_back(i + 2);
+        rotAngle.push_back(ofRandom(0,10));
+        angleStep.push_back(ofMap(i,0,noOfStars,0.01,0.1));
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    // create bounds for the angle rotation
-    if(rotAngle <= -15 || rotAngle >= 15)
-    {
-        angleStep = -1 * angleStep;
-    }
-    // update the angle each frame
-    rotAngle += angleStep;
+
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     // create trailing by drawing transparent rect over background
-    ofSetColor(255,50);
+    ofFill();
+    ofSetColor(255,10);
     ofDrawRectangle(0,0,ofGetScreenWidth(),ofGetScreenHeight());
+//    ofNoFill();
     // declare local variables
 
     // ofMap:
@@ -57,26 +58,26 @@ void ofApp::draw(){
     // Otherwise, return the value unchanged.
 
     // linearly map the mouse x-position in the window to custom range with active clamping
-    int resolution = ofMap(mouseX,0,ofGetWidth(),2,20, true);
-    float noOfStars = 20;
+    // int resolution = ofMap(mouseX,0,ofGetWidth(),2,20, true);
 
     // !! didnt realize i is clearly meant to indicate index
     ofPushMatrix();
         // translate buffer(?) to center of window
         ofTranslate(ofGetWidth()/2,ofGetHeight()/2);
+        ofScale(ofMap(mouseX,0,ofGetWidth(),0.1,3, true), ofMap(mouseX,0,ofGetWidth(),0.1,3, true));
         for(float i = 0; i <= noOfStars; i++)
         {
-                // rotate individual
-                ofRotate(i*5+ rotAngle);
-                // scale along the x+y-axis according to star index
-                ofScale(1-1/noOfStars,1-1/noOfStars, 1);
-                // color: linearly map the the index to 8-bit value with active clamping
-                ofSetColor(ofMap(i,0,noOfStars,0,255, true));
-                // linearly map the mouse y-position in the window to custom range with active clamping
-                int radius2 = ofMap(mouseY,0,ofGetHeight(),50,400,true);
-                int radius1 = 200;
-                star(0, 0, radius1, radius2, resolution);
-    }
+
+            // create bounds for the angle rotation
+            if(rotAngle[i] <= -2*i || rotAngle[i] >= 2*i)
+            {
+                angleStep[i] = -1 * angleStep[i];
+            }
+            // update the angle each frame
+            rotAngle[i] += angleStep[i];
+
+            mandala(i, radius1[i], radius2[i], resolution[i], rotAngle[i], angleStep[i]);
+        }
     ofPopMatrix();
 
 }
@@ -157,4 +158,28 @@ void ofApp::star(float x, float y, float radius1, float radius2, int npoints) {
         ofVertex(sx, sy);
     }
     ofEndShape();
+}
+
+// ?? bad practice to use the same name for parameters and arguments
+//--------------------------------------------------------------
+void ofApp::mandala(int index, int radius1, int radius2, int resolution, float rotAngle, float angleStep){
+//    ?? passing variable reference vs variable value as an argument.
+//    ?? updating associated variable
+//    // create bounds for the angle rotation
+//    if(rotAngle <= -15 || rotAngle >= 15)
+//    {
+//        angleStep = -1 * angleStep;
+//    }
+//    // update the angle each frame
+//    rotAngle += angleStep;
+
+    // implement rotatation of individual
+    ofRotate(index*5 + rotAngle);
+    // scale along the x+y-axis according to star index
+    // ?? why not z itself
+    ofScale(1-1/noOfStars,1-1/noOfStars, 1);
+    // color: linearly map the the index to 8-bit value with active clamping
+    ofSetColor(ofMap(index,0,noOfStars,150,255, true),30);
+    // linearly map the mouse y-position in the window to custom range with active clamping
+    star(0, 0, radius1, radius2, resolution);
 }

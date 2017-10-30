@@ -21,8 +21,14 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     void star(float x, float y, float radius1, float radius2, int npoints);
+    void mandala(int index, int radius1, int radius2, int resolution, float rotAngle, float angleStep);
 
-    float rotAngle;
-    float angleStep;
+    int noOfStars;
+    vector<int> radius1;
+    vector<int> radius2;
+    vector<int> resolution;
+    vector<float> rotAngle;
+    vector<float> angleStep;
+
 
 };
